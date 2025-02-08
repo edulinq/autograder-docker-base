@@ -1,4 +1,4 @@
-name: Ubuntu
+name: Alpine
 
 on:
   - push
@@ -6,7 +6,7 @@ on:
 env:
   REGISTRY: ghcr.io
   IMAGE_NAME: "edulinq/grader.base"
-  UBUNTU_VERSION: "22.04"
+  ALPINE_VERSION: "3.20.3"
 
 jobs:
   test:
@@ -40,21 +40,20 @@ jobs:
         id: meta
         uses: docker/metadata-action@369eb591f429131d6889c46b94e711f089e6ca96
         with:
-          context: ./ubuntu
+          context: ./alpine
           images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
 
       - name: Build and push Docker image
         id: push
         uses: docker/build-push-action@f2a1d5e99d037542a71f64918e516c093c6f3fc4
         with:
-          context: ./ubuntu
+          context: ./alpine
           platforms: linux/amd64,linux/arm64
           push: false
           labels: ${{ steps.meta.outputs.labels }}
           tags: |
-            "${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ github.ref_name }}"
-            "${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ github.ref_name }}-ubuntu"
-            "${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ github.ref_name }}-ubuntu${{ env.UBUNTU_VERSION }}"
+            "${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ github.ref_name }}-alpine"
+            "${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ github.ref_name }}-alpine${{ env.ALPINE_VERSION }}"
 
   deploy:
     needs: test
@@ -89,21 +88,20 @@ jobs:
         id: meta
         uses: docker/metadata-action@369eb591f429131d6889c46b94e711f089e6ca96
         with:
-          context: ./ubuntu
+          context: ./alpine
           images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
 
       - name: Build and push Docker image
         id: push
         uses: docker/build-push-action@f2a1d5e99d037542a71f64918e516c093c6f3fc4
         with:
-          context: ./ubuntu
+          context: ./alpine
           platforms: linux/amd64,linux/arm64
           push: true
           labels: ${{ steps.meta.outputs.labels }}
           tags: |
-            "${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ github.ref_name }}"
-            "${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ github.ref_name }}-ubuntu"
-            "${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ github.ref_name }}-ubuntu${{ env.UBUNTU_VERSION }}"
+            "${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ github.ref_name }}-alpine"
+            "${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ github.ref_name }}-alpine${{ env.ALPINE_VERSION }}"
 
       - name: Generate artifact attestation
         uses: actions/attest-build-provenance@v2
