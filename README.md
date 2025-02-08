@@ -1,3 +1,5 @@
-# Autograder Docker Base Ubuntu
+# Autograder Docker Base
 
-The source for the edulinq/grader.base-ubuntu image.
+Source for the `edulinq/grader.base` images.
+
+This is the recommended base image for Autograder graders.
