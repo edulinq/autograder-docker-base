@@ -8,6 +8,7 @@ on:
 env:
   REGISTRY: ghcr.io
   IMAGE_NAME: "edulinq/grader.base"
+  UBUNTU_VERSION: "22.04"
 
 jobs:
   deploy:
@@ -50,12 +51,12 @@ jobs:
           context: .
           platforms: linux/amd64,linux/arm64
           push: true
-          tags: |
-            ${{ steps.meta.outputs.tags }}
-            ${{ steps.meta.outputs.tags }}-ubuntu
-            ${{ steps.meta.outputs.tags }}-ubuntu22.04
-
           labels: ${{ steps.meta.outputs.labels }}
+          tags: |
+            "${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest"
+            "${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ github.ref_name }}"
+            "${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ github.ref_name }}-ubuntu"
+            "${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ github.ref_name }}-ubuntu${{ env.UBUNTU_VERSION }}"
 
       - name: Generate artifact attestation
         uses: actions/attest-build-provenance@v2
