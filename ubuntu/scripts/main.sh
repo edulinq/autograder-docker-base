@@ -24,8 +24,6 @@ function main() {
     local exist_status=0
 
     if [[ -f "${POST_OPERATIONS_PATH}" ]] ; then
-        echo "Running post submission operations."
-
         bash "${POST_OPERATIONS_PATH}"
         exit_status=$?
 
@@ -33,8 +31,6 @@ function main() {
             echo "ERROR: Failed to run post submission operations."
             return ${exist_status}
         fi
-    else
-        echo "Could not find any post submission operations."
     fi
 
     cd "${WORK_DIR}"
